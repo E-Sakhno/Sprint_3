@@ -70,3 +70,7 @@ class OnlineSalesRegisterCollector:
             return sum_nds * 0.9
         else:
             return sum_nds
+
+    def total_tax(self):
+        return self.twenty_percent_tax_calculation() + self.ten_percent_tax_calculation()
+    
