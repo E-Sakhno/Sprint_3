@@ -57,7 +57,7 @@ class OnlineSalesRegisterCollector:
             return sum_nds * 0.9
         else:
             return sum_nds
-        
+
     def ten_percent_tax_calculation(self):
         ten_percent_tax = []
         total = []
@@ -77,8 +77,23 @@ class OnlineSalesRegisterCollector:
     @staticmethod
     def get_telephone_number(telephone_number):
         if not isinstance(telephone_number, int):
-            raise ValueError('Необходимо ввести цифры')
-        elif len(str(telephone_number)) > 10: # хотя логичнее проверять на !=
+            raise ValueError("Необходимо ввести цифры")
+        elif len(str(telephone_number)) > 10:  # хотя логичнее проверять на !=
             raise ValueError('Необходимо ввести 10 цифр после "+7"')
         else:
             return f"+7{telephone_number}"
+
+    @staticmethod
+    def get_date_and_time():
+        date_and_time = []
+        now = datetime.datetime.now()
+        date = [
+            ["часы", lambda x: x.hour],
+            ["минуты", lambda x: x.minute],
+            ["день", lambda x: x.day],
+            ["месяц", lambda x: x.month],
+            ["год", lambda x: x.year],
+        ]
+        for timing in date:
+            date_and_time.append(f"{timing[0]}: {timing[1](now)}")
+        return date_and_time
