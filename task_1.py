@@ -57,3 +57,16 @@ class OnlineSalesRegisterCollector:
             return sum_nds * 0.9
         else:
             return sum_nds
+        
+    def ten_percent_tax_calculation(self):
+        ten_percent_tax = []
+        total = []
+        for item in self.__name_items:
+            if self.__tax_rate[item] == 10:
+                ten_percent_tax.append(item)
+                total.append(self.__item_price[item])
+        sum_nds = sum(ten_percent_tax) * 0.1
+        if self.__number_items > 10:
+            return sum_nds * 0.9
+        else:
+            return sum_nds
