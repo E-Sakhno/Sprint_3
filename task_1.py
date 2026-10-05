@@ -41,3 +41,19 @@ class OnlineSalesRegisterCollector:
             return sum_total * 0.9
         else:
             return sum_total
+
+    def twenty_percent_tax_calculation(self):
+        twenty_percent_tax = []
+        total = []
+        for item in self.__name_items:
+            if self.__tax_rate[item] == 20:
+                twenty_percent_tax.append(item)
+                total.append(self.__item_price[item])
+        sum_nds = sum(twenty_percent_tax) * 0.2
+        if self.__number_items > 10:
+            # можно сначала просуммировать товары, учесть скидку и рассчитать НДС
+            # но items * 0.9 * 0.2 == items * 0.2 * 0.9
+            # поэтому просто умножаю НДС на 0.9
+            return sum_nds * 0.9
+        else:
+            return sum_nds
