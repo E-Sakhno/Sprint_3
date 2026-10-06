@@ -49,7 +49,7 @@ class OnlineSalesRegisterCollector:
             if self.__tax_rate[item] == 20:
                 twenty_percent_tax.append(item)
                 total.append(self.__item_price[item])
-        sum_nds = sum(twenty_percent_tax) * 0.2
+        sum_nds = sum(total) * 0.2
         if self.__number_items > 10:
             # можно сначала просуммировать товары, учесть скидку и рассчитать НДС
             # но items * 0.9 * 0.2 == items * 0.2 * 0.9
@@ -65,7 +65,7 @@ class OnlineSalesRegisterCollector:
             if self.__tax_rate[item] == 10:
                 ten_percent_tax.append(item)
                 total.append(self.__item_price[item])
-        sum_nds = sum(ten_percent_tax) * 0.1
+        sum_nds = sum(total) * 0.1
         if self.__number_items > 10:
             return sum_nds * 0.9
         else:
@@ -97,3 +97,82 @@ class OnlineSalesRegisterCollector:
         for timing in date:
             date_and_time.append(f"{timing[0]}: {timing[1](now)}")
         return date_and_time
+
+# проверки сгенерила ИИшкой
+# ================== ПРОВЕРКА ==================
+
+print("========== 1. Геттеры ==========")
+collector = OnlineSalesRegisterCollector()
+print("Пустой чек:", collector.name_items)          # []
+print("Количество товаров:", collector.number_items) # 0
+
+print("\n========== 2. Добавление товаров ==========")
+collector.add_item_to_cheque('чипсы')
+collector.add_item_to_cheque('кола')
+collector.add_item_to_cheque('молоко')
+print("Чек после добавления:", collector.name_items)
+print("Количество товаров:", collector.number_items)
+
+print("\n========== 3. Ошибки при добавлении ==========")
+try:
+    collector.add_item_to_cheque('')          # пустое имя
+except ValueError as e:
+    print("ValueError:", e)
+
+try:
+    collector.add_item_to_cheque('а' * 41)    # длинное имя
+except ValueError as e:
+    print("ValueError:", e)
+
+try:
+    collector.add_item_to_cheque('хлеб')      # нет в справочнике
+except NameError as e:
+    print("NameError:", e)
+
+print("\n========== 4. Удаление товара ==========")
+collector.delete_item_from_check('молоко')
+print("Чек после удаления 'молоко':", collector.name_items)
+print("Количество товаров:", collector.number_items)
+
+try:
+    collector.delete_item_from_check('сыр')   # нет в чеке
+except NameError as e:
+    print("NameError:", e)
+
+print("\n========== 5. check_amount (без скидки) ==========")
+# чипсы 50 + кола 100 = 150
+print("Сумма чека:", collector.check_amount())
+
+print("\n========== 6. check_amount (со скидкой) ==========")
+big_collector = OnlineSalesRegisterCollector()
+for _ in range(11):
+    big_collector.add_item_to_cheque('чипсы')  # 11 * 50 = 550, со скидкой 495.0
+print("Товаров в чеке:", big_collector.number_items)
+print("Сумма чека со скидкой:", big_collector.check_amount())
+
+print("\n========== 7. НДС 20% ==========")
+# чипсы 50 + кола 100 = 150, НДС = 30.0
+print("НДС 20%:", collector.twenty_percent_tax_calculation())
+
+print("\n========== 8. НДС 10% ==========")
+collector.add_item_to_cheque('молоко')  # молоко 55, НДС = 5.5
+print("НДС 10%:", collector.ten_percent_tax_calculation())
+
+print("\n========== 9. Общая сумма налогов ==========")
+print("Общий НДС:", collector.total_tax())
+
+print("\n========== 10. Телефон ==========")
+print("Телефон:", OnlineSalesRegisterCollector.get_telephone_number(9991234567))
+
+try:
+    OnlineSalesRegisterCollector.get_telephone_number("9991234567")  # строка
+except ValueError as e:
+    print("ValueError:", e)
+
+try:
+    OnlineSalesRegisterCollector.get_telephone_number(12345678901)   # 11 цифр
+except ValueError as e:
+    print("ValueError:", e)
+
+print("\n========== 11. Дата и время ==========")
+print(OnlineSalesRegisterCollector.get_date_and_time())
